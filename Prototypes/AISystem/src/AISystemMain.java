@@ -1,3 +1,4 @@
+import java.util.Vector;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -10,6 +11,7 @@ import org.newdawn.slick.BasicGame;
 public class AISystemMain extends BasicGame
 {
 	private Area _area;
+	private Vector<Enemy> _listEnemies;
 	
 	AISystemMain(String title)
 	{
@@ -22,10 +24,16 @@ public class AISystemMain extends BasicGame
 		this._area.setType(1, 1, Area.TYPE_BOX);
 		this._area.setType(2, 2, Area.TYPE_BOX);
 		this._area.setType(5, 8, Area.TYPE_BOX);
+
+		this._listEnemies = new Vector<Enemy>();
+		this._listEnemies.addElement(new Enemy());
 	}
 
 	public void update(GameContainer container, int i) throws SlickException
 	{
+		for(int it=0;it < this._listEnemies.size();++it){
+			EnemyBehavior.update(this._listEnemies.elementAt(it));
+		}
 	}
 
 	public void render(GameContainer container, Graphics renderer) throws SlickException
