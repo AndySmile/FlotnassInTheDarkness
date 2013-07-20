@@ -3,3 +3,4 @@
 .DS_Store
 *.jar
 Prototypes/AISystem/.gitignore
+Source/FlotnessInTheDargness/.gitignore
