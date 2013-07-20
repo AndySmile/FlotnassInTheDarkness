@@ -1,29 +1,20 @@
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 
 public class Box {
-	private Image sprite;
 	private Vector2f position;
 	private int collisionRadius;
 	
-	public Box(Vector2f pos, Image img, int colRad) {
+	public Box(Vector2f pos, int colRad) {
 		position = pos;
-		sprite = img;
 		collisionRadius = colRad;
 	}
 
-	public void render(Graphics pen) {
-		pen.drawImage(sprite, position.x - 16, position.y - 16);
-	}
-
-	public Image getSprite() {
-		return sprite;
-	}
-
-	public void setSprite(Image sprite) {
-		this.sprite = sprite;
+	public void render(Graphics pen) throws SlickException {
+		
+		pen.drawImage(SpriteCache.instanceOf().getSprite("box_closed.png"), position.x - 16, position.y - 16);
 	}
 
 	public Vector2f getPosition() {

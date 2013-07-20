@@ -2,11 +2,10 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player {
-	private Image sprite;
 	private Vector2f position;
 	private int direction;
 	private int collisionRadius;
@@ -18,9 +17,8 @@ public class Player {
 	
 	private int sanity = 100;
 
-	public Player(Vector2f pos, Image img, int colRad) {
+	public Player(Vector2f pos, int colRad) throws SlickException {
 		position = pos;
-		sprite = img;
 		collisionRadius = colRad;
 	}
 
@@ -31,30 +29,32 @@ public class Player {
 	
 	private void collideWithBox() {
 		for(int i = 0; i < boxes.size(); i++) {
-			if(position.distance(boxes.get(i).getPosition()) < collisionRadius)
-				items.add(boxes.get(i).getItem());
+			if(position.distance(boxes.get(i).getPosition()) < collisionRadius) {
+//				items.add(boxes.get(i).getItem());
 				boxes.remove(i);
+			}
 		}
 	}
 
-	private void move() {
+	private void move() {        
 		position.x += moveX * 2;
         position.y += moveY * 2;
+        
         moveX = 0;
-        moveY = 0;		
+        moveY = 0;
+		
 	}
 
-	public void render(Graphics pen) {
-		pen.drawImage(sprite, position.x - 16, position.y - 16);
+	public void render(Graphics pen) throws SlickException {
+		
+//		if(moveX == -1)
+			pen.drawImage(SpriteCache.instanceOf().getSprite("floatsam.png"), position.x - 16, position.y - 16);
+//		if(moveX == 1)
+//			pen.drawImage(SpriteCache.instanceOf().getSprite("floatsam.png"), position.x - 16, position.y - 16);
+
 	}
 
-	public Image getSprite() {
-		return sprite;
-	}
 
-	public void setSprite(Image sprite) {
-		this.sprite = sprite;
-	}
 
 	public Vector2f getPosition() {
 		return position;
