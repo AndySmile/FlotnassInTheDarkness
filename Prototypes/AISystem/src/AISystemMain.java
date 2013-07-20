@@ -9,6 +9,8 @@ import org.newdawn.slick.BasicGame;
  */
 public class AISystemMain extends BasicGame
 {
+	private Area _area;
+	
 	AISystemMain(String title)
 	{
 		super(title);
@@ -16,14 +18,19 @@ public class AISystemMain extends BasicGame
 
 	public void init(GameContainer container) throws SlickException
 	{
+		this._area = new Area(60, 60);
+		this._area.setType(1, 1, Area.TYPE_BOX);
+		this._area.setType(2, 2, Area.TYPE_BOX);
+		this._area.setType(5, 8, Area.TYPE_BOX);
 	}
 
 	public void update(GameContainer container, int i) throws SlickException
 	{
 	}
 
-	public void render(GameContainer container, Graphics g) throws SlickException
+	public void render(GameContainer container, Graphics renderer) throws SlickException
 	{
+		this._area.render(renderer);
 	}
 
 	public static void main(String[] args)
@@ -34,7 +41,7 @@ public class AISystemMain extends BasicGame
 			app.setDisplayMode(800, 600, false);
 			app.start();
 		}
-		catch(SlickException e){
+		catch(Exception e){
 			System.out.println(e.getMessage());
 		}
 	}
