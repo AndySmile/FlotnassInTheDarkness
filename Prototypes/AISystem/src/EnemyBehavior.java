@@ -18,11 +18,11 @@ public class EnemyBehavior
 		{
 			case Enemy.STATE_SEARCHING:
 			{
-				Vector2f diffVec = enemy.getPosition() - _player.getPosition();
+				/*Vector2f diffVec = enemy.getPosition().sub(_player.getPosition());
 
 				if(diffVec.length() <= 64.0){
 					enemy.setState(Enemy.STATE_ATTACK);
-				}
+				}*/
 			}break;
 		}
 	}
