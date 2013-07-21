@@ -48,15 +48,13 @@ public class TheGame extends BasicGame {
 		
 		Player.setBoxes(boxes);
 		
-  	  water = SpriteCache.instanceOf().getSprite("water.png");
-  	  waterG = new Image (WIDTH, HEIGHT);
-//  	  map = new TiledMap("map/map1.tmx");
-  	  iangle = 0.0;
+		water = SpriteCache.instanceOf().getSprite("water.png");
+		waterG = new Image (WIDTH, HEIGHT);
+		iangle = 0.0;
   	  
-  	  s = null;
-  	  float[] TowerPolygon = new float[]{0, 0,  850, 850, 400, 250};
-  	  s = new Polygon (TowerPolygon);
-
+		s = null;
+		float[] TowerPolygon = new float[]{0, 0,  850, 850, 400, 250};
+		s = new Polygon (TowerPolygon);
 	}
 
 	private void handleInput(GameContainer gc) {
@@ -81,33 +79,30 @@ public class TheGame extends BasicGame {
 		player.update(gc, timeDelta);
 		
         Input input = gc.getInput();
-
 	}
 	
 	@Override
 	public void render(GameContainer gc, Graphics pen) throws SlickException {
 
-		
-		
   	  drawWater(pen);
   	  letThereBeDarkness(pen);
+  	  
+  	  for(Box b : boxes) {
+  		  b.render(pen);
+  	  }
+		
   	  // Draw Lighthouse
   	  Image img = SpriteCache.instanceOf().getSprite("lighthouse.png");
   	  img.draw((WIDTH/2)-(img.getWidth()/2), (HEIGHT/2)-(img.getHeight()/2));
   	  drawLightTowerLight(pen);
   	  Image img2 = SpriteCache.instanceOf().getSprite("lighthouse_top.png");
   	  img2.draw((WIDTH/2)-(img2.getWidth()/2), (HEIGHT/2)-(img2.getHeight()/2));
-  	  
-		for(Box b : boxes) {
-			b.render(pen);
-		}
 		
-		player.render(pen);
+  	  player.render(pen);
 
 	}
 	
     public boolean isInTheLight (Graphics g){
-  	  
    	 
   	  g.setColor(Color.white);
   	  Transform t = new Transform(Transform.createRotateTransform((float) iangle));
@@ -126,7 +121,7 @@ public class TheGame extends BasicGame {
      */
     public void letThereBeDarkness (Graphics g){
 		  g.setColor(new Color(30,30,60, 200));
-  	  g.fillRect(0, 0, WIDTH, HEIGHT);
+		  g.fillRect(0, 0, WIDTH, HEIGHT);
 	  }
 	  
     
@@ -142,18 +137,12 @@ public class TheGame extends BasicGame {
   	  Image img = SpriteCache.instanceOf().getSprite("lighthouse.png");
   	  light.setAlpha((float) 0.7);
   	 
-  	  
   	  light.rotate((float) iangle);
   	  g.drawImage(light, (WIDTH/2)-590, (HEIGHT/2)-300);
-  	  
-  	  
   	  
   	  iangle = 0.5;
   	  //isInTheLight(g);
   	  return false;
-  	  
-  	  
-  	  
     }
     
 	public static void main ( String[] args ) throws SlickException {
