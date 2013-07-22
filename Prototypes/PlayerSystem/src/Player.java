@@ -4,6 +4,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player {
@@ -20,6 +21,8 @@ public class Player {
 	
 	private int sanity = 100;
 	private Animation swimRightAnim;
+	
+	boolean blocked;
 
 	public Player(Vector2f pos, int colRad) throws SlickException {
 		position = pos;
@@ -51,13 +54,22 @@ public class Player {
 		if(moveX != 0)
 			lastMoveX = moveX;
 		
-        move();
+		// test collision with lighthouse
+		if(LichgHouse.getCollShape().intersects(new Circle(position.x, position.y, collisionRadius)))
+			blocked = true;
+		
+		if(!blocked)
+			move();
+		
+        moveX = 0;
+        moveY = 0;
+		
         collideWithBox();
 	}
 	
 	private void collideWithBox() {
 		for(int i = 0; i < boxes.size(); i++) {
-			if(position.distance(boxes.get(i).getPosition()) < collisionRadius) {
+			if(position.distance(boxes.get(i).getPosition()) < collisionRadius + 16) {
 //				items.add(boxes.get(i).getItem());
 				boxes.remove(i);
 			}
@@ -67,9 +79,6 @@ public class Player {
 	private void move() {        
 		position.x += moveX * 2;
         position.y += moveY * 2;
-    	
-        moveX = 0;
-        moveY = 0;
 	}
 
 	public void render(Graphics pen) throws SlickException {

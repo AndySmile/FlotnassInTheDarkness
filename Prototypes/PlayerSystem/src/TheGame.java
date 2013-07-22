@@ -10,13 +10,13 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class TheGame extends BasicGame {
 
 	private Player player;
+	private LichgHouse lightHouse;
 	
 	private ArrayList<Box> boxes = new ArrayList<Box>();
 	
@@ -25,7 +25,6 @@ public class TheGame extends BasicGame {
     public Image waterG;
     public Image water;
     private TiledMap map;
-    double iangle;
     
     public Shape s;
 	
@@ -36,7 +35,8 @@ public class TheGame extends BasicGame {
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		SpriteCache.instanceOf().addResourceLocation("./sprites/");
-		player = new Player(new Vector2f(10, 10), 30);
+		player = new Player(new Vector2f(10, 10), 16);
+		lightHouse = new LichgHouse(new Vector2f(WIDTH/2, HEIGHT/2), "lighthouse.png");
 
 		for(int i = 0; i < 10; i++) {
 			Box box = new Box(
@@ -50,7 +50,6 @@ public class TheGame extends BasicGame {
 		
 		water = SpriteCache.instanceOf().getSprite("water.png");
 		waterG = new Image (WIDTH, HEIGHT);
-		iangle = 0.0;
   	  
 		s = null;
 		float[] TowerPolygon = new float[]{0, 0,  850, 850, 400, 250};
@@ -77,6 +76,7 @@ public class TheGame extends BasicGame {
 	public void update(GameContainer gc, int timeDelta) throws SlickException {
 		handleInput(gc);
 		player.update(gc, timeDelta);
+		lightHouse.update(gc, timeDelta);
 		
         Input input = gc.getInput();
 	}
@@ -84,37 +84,17 @@ public class TheGame extends BasicGame {
 	@Override
 	public void render(GameContainer gc, Graphics pen) throws SlickException {
 
-  	  drawWater(pen);
-  	  letThereBeDarkness(pen);
-  	  
-  	  for(Box b : boxes) {
-  		  b.render(pen);
-  	  }
+		drawWater(pen);
+		letThereBeDarkness(pen);
+	  
+		for(Box b : boxes) {
+			b.render(pen);
+		}
 		
-  	  // Draw Lighthouse
-  	  Image img = SpriteCache.instanceOf().getSprite("lighthouse.png");
-  	  img.draw((WIDTH/2)-(img.getWidth()/2), (HEIGHT/2)-(img.getHeight()/2));
-  	  drawLightTowerLight(pen);
-  	  Image img2 = SpriteCache.instanceOf().getSprite("lighthouse_top.png");
-  	  img2.draw((WIDTH/2)-(img2.getWidth()/2), (HEIGHT/2)-(img2.getHeight()/2));
-		
-  	  player.render(pen);
-
+		player.render(pen);
+		lightHouse.render(pen);
 	}
-	
-    public boolean isInTheLight (Graphics g){
-   	 
-  	  g.setColor(Color.white);
-  	  Transform t = new Transform(Transform.createRotateTransform((float) iangle));
-  	  s = s.transform(t);
-  	  g.translate(400, 300);
 
-  	  g.fill(s);
-  	  
-  	  
-  	  return false;
-    }
-	
     /**
      * Draws ambient light (dark).
      * @param g
@@ -131,18 +111,6 @@ public class TheGame extends BasicGame {
   			  water.draw(x, y);
       	  } 
   	  }
-    }
-    public boolean drawLightTowerLight (Graphics g) throws SlickException{
-  	  Image light = SpriteCache.instanceOf().getSprite("light.png");
-  	  Image img = SpriteCache.instanceOf().getSprite("lighthouse.png");
-  	  light.setAlpha((float) 0.7);
-  	 
-  	  light.rotate((float) iangle);
-  	  g.drawImage(light, (WIDTH/2)-590, (HEIGHT/2)-300);
-  	  
-  	  iangle = 0.5;
-  	  //isInTheLight(g);
-  	  return false;
     }
     
 	public static void main ( String[] args ) throws SlickException {
