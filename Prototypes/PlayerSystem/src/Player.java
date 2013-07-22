@@ -1,59 +1,85 @@
 import java.util.ArrayList;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player {
-	private Image sprite;
 	private Vector2f position;
 	private int direction;
 	private int collisionRadius;
 	
+	private Animation swimLeftAnim;
+	
 	private static ArrayList<Box> boxes;
 	private ArrayList<Item> items;
 	
-	private int moveX, moveY;
+	private int moveX, moveY, lastMoveX;
 	
 	private int sanity = 100;
+	private Animation swimRightAnim;
 
-	public Player(Vector2f pos, Image img, int colRad) {
+	public Player(Vector2f pos, int colRad) throws SlickException {
 		position = pos;
-		sprite = img;
 		collisionRadius = colRad;
+		
+		swimLeftAnim = new Animation(true);
+		swimLeftAnim.addFrame(SpriteCache.instanceOf().getSprite("player_left_1.png"), 100);
+		swimLeftAnim.addFrame(SpriteCache.instanceOf().getSprite("player_left_2.png"), 100);
+		swimLeftAnim.addFrame(SpriteCache.instanceOf().getSprite("player_left_3.png"), 100);
+		
+		swimRightAnim = new Animation(true);
+		swimRightAnim.addFrame(SpriteCache.instanceOf().getSprite("player_right_1.png"), 100);
+		swimRightAnim.addFrame(SpriteCache.instanceOf().getSprite("player_right_2.png"), 100);
+		swimRightAnim.addFrame(SpriteCache.instanceOf().getSprite("player_right_3.png"), 100);
 	}
 
 	public void update(GameContainer gc, int timeDelta) {
+		
+		// animate movement
+		if(moveX != 0 || moveY != 0) {
+			swimLeftAnim.start();
+			swimRightAnim.start();
+		} else {
+			swimRightAnim.stop();
+			swimLeftAnim.stop();
+		}
+	
+		// remember last direction
+		if(moveX != 0)
+			lastMoveX = moveX;
+		
         move();
         collideWithBox();
 	}
 	
 	private void collideWithBox() {
 		for(int i = 0; i < boxes.size(); i++) {
-			if(position.distance(boxes.get(i).getPosition()) < collisionRadius)
-				items.add(boxes.get(i).getItem());
+			if(position.distance(boxes.get(i).getPosition()) < collisionRadius) {
+//				items.add(boxes.get(i).getItem());
 				boxes.remove(i);
+			}
 		}
 	}
 
-	private void move() {
+	private void move() {        
 		position.x += moveX * 2;
         position.y += moveY * 2;
+    	
         moveX = 0;
-        moveY = 0;		
+        moveY = 0;
 	}
 
-	public void render(Graphics pen) {
-		pen.drawImage(sprite, position.x - 16, position.y - 16);
-	}
-
-	public Image getSprite() {
-		return sprite;
-	}
-
-	public void setSprite(Image sprite) {
-		this.sprite = sprite;
+	public void render(Graphics pen) throws SlickException {
+			
+		if(lastMoveX == -1) {
+			swimLeftAnim.draw(position.x - 16, position.y - 16);
+		}
+		if(lastMoveX == 1) {
+			swimRightAnim.draw(position.x - 16, position.y - 16);
+		}		
 	}
 
 	public Vector2f getPosition() {
@@ -110,5 +136,13 @@ public class Player {
 
 	public void setSanity(int sanity) {
 		this.sanity = sanity;
+	}
+
+	public int getLastMoveX() {
+		return lastMoveX;
+	}
+
+	public void setLastMoveX(int lastMoveX) {
+		this.lastMoveX = lastMoveX;
 	}
 }
