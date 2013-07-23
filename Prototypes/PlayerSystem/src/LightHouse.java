@@ -1,5 +1,4 @@
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -8,14 +7,14 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 
-public class LichgHouse {
+public class LightHouse {
 	private static Shape collShape;
 	private Vector2f position;
 	private Image sprite;
 	
     double iangle;
 	
-	public LichgHouse(Vector2f pos, String spriteName) throws SlickException {
+	public LightHouse(Vector2f pos, String spriteName) throws SlickException {
 		sprite = SpriteCache.instanceOf().getSprite(spriteName);
 		position = pos;
 		
@@ -23,16 +22,9 @@ public class LichgHouse {
 		iangle = 0.0;
 	}
 	
-	public void update(GameContainer gc, int timeDelta) {
-		
-	}
-	
 	public void render(Graphics pen) throws SlickException {
-		
-		Image img = SpriteCache.instanceOf().getSprite("lighthouse.png");
-		img.draw((position.x)-(img.getWidth()/2), (position.y)-(img.getHeight()/2));
-		
-		
+		sprite.draw((position.x)-(sprite.getWidth()/2), (position.y)-(sprite.getHeight()/2));
+				
 		Image light = SpriteCache.instanceOf().getSprite("light.png");
 		light.setAlpha((float) 0.7);
 		 
@@ -51,7 +43,7 @@ public class LichgHouse {
 	}
 
 	public static void setCollShape(Shape collShape) {
-		LichgHouse.collShape = collShape;
+		LightHouse.collShape = collShape;
 	}
 
 	public double getIangle() {

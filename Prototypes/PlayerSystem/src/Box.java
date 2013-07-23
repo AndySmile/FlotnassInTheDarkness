@@ -34,8 +34,6 @@ public class Box {
 	}
 
 	public Item getItem() {
-		return null;
-		// TODO Auto-generated method stub
-		
+		return null;		
 	}
 }

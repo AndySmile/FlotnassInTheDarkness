@@ -5,6 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player {
@@ -55,8 +56,23 @@ public class Player {
 			lastMoveX = moveX;
 		
 		// test collision with lighthouse
-		if(LichgHouse.getCollShape().intersects(new Circle(position.x, position.y, collisionRadius)))
+		if(LightHouse.getCollShape().intersects(new Circle(position.x, position.y, collisionRadius)))
 			blocked = true;
+		
+		boolean inTheLight = false;
+		for(Shape light : TheDarkness.getLights()) {
+			if(light.contains(new Circle(position.x, position.y, collisionRadius))) {
+				System.err.println("in the light");
+				inTheLight = true;
+				break;
+			}
+		}
+		
+		if(inTheLight && sanity < 100)
+			sanity++;
+		
+		if(!inTheLight && sanity > 0)
+			sanity--;
 		
 		if(!blocked)
 			move();
@@ -86,9 +102,12 @@ public class Player {
 		if(lastMoveX == -1) {
 			swimLeftAnim.draw(position.x - 16, position.y - 16);
 		}
+		
 		if(lastMoveX == 1) {
 			swimRightAnim.draw(position.x - 16, position.y - 16);
-		}		
+		}
+		
+		pen.drawString(String.valueOf(sanity), TheGame.WIDTH - 100, 0);
 	}
 
 	public Vector2f getPosition() {

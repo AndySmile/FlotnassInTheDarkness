@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -11,20 +10,18 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.tiled.TiledMap;
 
 public class TheGame extends BasicGame {
 
 	private Player player;
-	private LichgHouse lightHouse;
+	private LightHouse lightHouse;
+	private TheDarkness darkness;
 	
 	private ArrayList<Box> boxes = new ArrayList<Box>();
 	
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
-    public Image waterG;
     public Image water;
-    private TiledMap map;
     
     public Shape s;
 	
@@ -36,7 +33,8 @@ public class TheGame extends BasicGame {
 	public void init(GameContainer gc) throws SlickException {
 		SpriteCache.instanceOf().addResourceLocation("./sprites/");
 		player = new Player(new Vector2f(10, 10), 16);
-		lightHouse = new LichgHouse(new Vector2f(WIDTH/2, HEIGHT/2), "lighthouse.png");
+		lightHouse = new LightHouse(new Vector2f(WIDTH/2, HEIGHT/2), "lighthouse.png");
+		darkness = new TheDarkness(WIDTH, HEIGHT);
 
 		for(int i = 0; i < 10; i++) {
 			Box box = new Box(
@@ -49,7 +47,6 @@ public class TheGame extends BasicGame {
 		Player.setBoxes(boxes);
 		
 		water = SpriteCache.instanceOf().getSprite("water.png");
-		waterG = new Image (WIDTH, HEIGHT);
   	  
 		s = null;
 		float[] TowerPolygon = new float[]{0, 0,  850, 850, 400, 250};
@@ -76,35 +73,24 @@ public class TheGame extends BasicGame {
 	public void update(GameContainer gc, int timeDelta) throws SlickException {
 		handleInput(gc);
 		player.update(gc, timeDelta);
-		lightHouse.update(gc, timeDelta);
-		
-        Input input = gc.getInput();
 	}
 	
 	@Override
 	public void render(GameContainer gc, Graphics pen) throws SlickException {
 
 		drawWater(pen);
-		letThereBeDarkness(pen);
 	  
 		for(Box b : boxes) {
 			b.render(pen);
 		}
 		
 		player.render(pen);
+		
 		lightHouse.render(pen);
+		darkness.render(pen);
+
 	}
 
-    /**
-     * Draws ambient light (dark).
-     * @param g
-     */
-    public void letThereBeDarkness (Graphics g){
-		  g.setColor(new Color(30,30,60, 200));
-		  g.fillRect(0, 0, WIDTH, HEIGHT);
-	  }
-	  
-    
     public void drawWater (Graphics g){
   	  for (int x = 0; x < WIDTH; x+= water.getWidth()){
   		  for (int y = 0; y < HEIGHT; y+= water.getHeight()){
